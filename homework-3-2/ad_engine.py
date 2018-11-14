@@ -8,7 +8,7 @@ for the Forney Industries Protectron 3001
 Jackson Myers
 '''
 
-import itertools
+from itertools import *
 import unittest
 import math
 import numpy as np
@@ -62,9 +62,21 @@ class AdEngine:
         """
         best_combo, best_util = None, -math.inf
         # TODO: Rest of the implementation goes here!
-        print(self.decision_network.predict_proba(X=evidence))
-        cpt_vals = self.decision_network.predict_proba(X=evidence)
-        best_combo = { "A1": None, "A2": None}
+        ###############
+        ## SUDO CODE ##
+        ###############
+        evidence_object = evidence
+        for var in self.dec_vars:
+            evidence_object[var] = None
+        for ad1,ad2 in [00,01,10,11]:
+            for outcome in self.util_map:
+                    util_count += predict_proba(evidence_object) * util_map[outcome]
+            if util_count > best_util:
+                best_util = util_count
+                best_combo = {"Ad1": ad1, "Ad2": ad2}
+
+
+
         return best_combo
 
 
@@ -79,8 +91,7 @@ class AdEngineTests(unittest.TestCase):
             # TODO: Decide what the utility map should be for the Defendotron
             # example; see format of util_map in spec and above!
             util_map = {
-                "G": {0: 20, 1: -5},
-                "F": {0: 15, 1: 30},
+                "S": {0: 0, 1: 5000, 2: 17760}
             }
         )
         self.assertEqual(engine.decide({"G": 0}), {"Ad1": 0, "Ad2": 1})
