@@ -6,6 +6,7 @@ ad traits to maximize expected utility of converting a sale
 for the Forney Industries Protectron 3001
 
 Jackson Myers
+Basil Latif
 '''
 
 from itertools import *
@@ -110,6 +111,27 @@ class AdEngineTests(unittest.TestCase):
         self.assertEqual(engine.decide({"G": 0}), {"Ad1": 0, "Ad2": 1})
         self.assertEqual(engine.decide({"F": 1}), {"Ad1": 1, "Ad2": 0})
         self.assertEqual(engine.decide({"G": 1, "T": 0}), {"Ad1": 1, "Ad2": 1})
+
+    def test_defendotron_ad_engine_t2(self):
+        engine = AdEngine(
+            data_file = 'hw4_data.csv',
+            # [!] Note: in this example, say we are only deciding upon the ad
+            # video (Ad1); our engine's results should adapt accordingly (see
+            # tests below)
+            dec_vars = ["Ad1"],
+            # TODO: Current structure is blank; you need to fill this in using
+            # the results from the Tetrad analysis!
+            structure = ((), (), (0,9), (6,), (0,1), (1,8), (), (2,5), (), ()),
+            # TODO: Decide what the utility map should be for the Defendotron
+            # example; see format of util_map in spec and above!
+            util_map = {
+                "S": {0: 0, 1: 5000, 2: 17760}
+            }
+        )
+        self.assertEqual(engine.decide({"A": 1}), {"Ad1": 0})
+        self.assertEqual(engine.decide({"P": 1, "A": 0}), {"Ad1": 1})
+        self.assertEqual(engine.decide({"A": 1, "G": 1, "T": 1}), {"Ad1": 0})
+
 
 if __name__ == "__main__":
     unittest.main()
