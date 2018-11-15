@@ -9,6 +9,7 @@ Jackson Myers
 '''
 
 from itertools import *
+import csv
 import unittest
 import math
 import numpy as np
@@ -44,9 +45,18 @@ class AdEngine:
         self.structure = structure
         self.dec_vars = dec_vars
         self.util_map = util_map
+        self.names = []
 
         data = np.genfromtxt(self.data_file, delimiter=",", skip_header=1)
-        self.decision_network = BayesianNetwork.from_structure(X=data, structure=self.structure, state_names=["P", "A", "G", "I", "T", "F", "H", "S", "Ad2", "Ad1"])
+        with open(self.data_file) as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            line_count = 0
+            for row in csv_reader:
+                if line_count == 0:
+                    self.names = row
+                    line_count += 1
+
+        self.decision_network = BayesianNetwork.from_structure(X=data, structure=self.structure, state_names=self.names)
         self.decision_network.bake()
 
     def decide(self, evidence):
@@ -62,20 +72,23 @@ class AdEngine:
         """
         best_combo, best_util = None, -math.inf
         # TODO: Rest of the implementation goes here!
-        ###############
-        ## SUDO CODE ##
-        ###############
+        sequence_array = ["".join(seq) for seq in product("01", repeat=len(self.dec_vars))]
+
         evidence_object = evidence
         for var in self.dec_vars:
             evidence_object[var] = None
-        for ad1,ad2 in [00,01,10,11]:
-            for outcome in self.util_map:
-                    util_count += predict_proba(evidence_object) * util_map[outcome]
+
+
+        for seq in sequence_array:
+            seq_count, util_count = 0, 0
+            for var in self.dec_vars:
+                evidence_object[var] = int(seq[seq_count])
+                seq_count += 1
+            for k,v in self.util_map["S"].items():
+                util_count += (self.decision_network.predict_proba(X=evidence_object)[7].parameters[0][k]) * v
             if util_count > best_util:
                 best_util = util_count
-                best_combo = {"Ad1": ad1, "Ad2": ad2}
-
-
+                best_combo = {"Ad1": int(seq[0]), "Ad2": int(seq[1])}
 
         return best_combo
 
