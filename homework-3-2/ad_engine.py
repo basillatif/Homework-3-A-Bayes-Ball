@@ -89,7 +89,6 @@ class AdEngine:
                 util_count += (self.decision_network.predict_proba(X=evidence_object)[7].parameters[0][k]) * v
             if util_count > best_util:
                 best_util = util_count
-                #best_combo = {"Ad1": int(seq[0]), "Ad2": int(seq[1])}
                 index = 0
                 for dec_var in self.dec_vars:
                     best_combo[dec_var] = int(seq[index])
