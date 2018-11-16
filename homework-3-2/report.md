@@ -6,11 +6,11 @@
 ***
 
 ### 2.
-First, the PC algorithm takes an undirected graph. Then, it creates directed edges. Initially, the algorithm has every edge in the network. For each pair of vertices that has an edge between it, say X and Y, and the algorithm checks if some variable Z is conditionally independent of X and Y. Each iteration of the while loop removes variables that have been found to be conditionally independent.
+The PC Learning algorithm scans a data set for conditional independences between all pairs of variables. Next, it uses the learned relationships to create an undirected graph. Then, edges are directed given information from conditional independences. Edges are left undirected if no conditional independences were found.
 ***
 
 ### 3.
-Using the data, the algorithm was able to find dependence relationships between most variables. Th algorithm found that both *I* and *H* were conditionally independent from the rest of the variables. Additionally, the algorithm added an undirected edge between *I* and *H* because no conditional independences were found
+Using the data, the algorithm was able to find dependence relationships between most variables. The algorithm found that both *I* and *H* were conditionally independent from the rest of the variables. Additionally, the algorithm added an undirected edge between *I* and *H* because no conditional independences were found. *I* and *H* are disjoint from the rest of the graph because the algorithm found they were independent of all the other variables.
 ***
 
 ### 4.
