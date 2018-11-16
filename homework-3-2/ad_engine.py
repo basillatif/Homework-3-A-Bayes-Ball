@@ -71,7 +71,7 @@ class AdEngine:
         observed values, of the format: {"Obs1": val1, "Obs2": val2, ...}
         :return: dict of format: {"DecVar1": val1, "DecVar2": val2, ...}
         """
-        best_combo, best_util = None, -math.inf
+        best_combo, best_util = {}, -math.inf
         # TODO: Rest of the implementation goes here!
         sequence_array = ["".join(seq) for seq in product("01", repeat=len(self.dec_vars))]
 
@@ -89,7 +89,11 @@ class AdEngine:
                 util_count += (self.decision_network.predict_proba(X=evidence_object)[7].parameters[0][k]) * v
             if util_count > best_util:
                 best_util = util_count
-                best_combo = {"Ad1": int(seq[0]), "Ad2": int(seq[1])}
+                #best_combo = {"Ad1": int(seq[0]), "Ad2": int(seq[1])}
+                index = 0
+                for dec_var in self.dec_vars:
+                    best_combo[dec_var] = int(seq[index])
+                    index += 1
 
         return best_combo
 
